@@ -2,9 +2,9 @@
 pragma solidity ^0.8.30;
 
 import "forge-std/Test.sol";
-import {USDCToken} from "../../src/USDC.sol";
-import {IUSDC} from "../../src/interfaces/IUSDC.sol";
-import {DeployUSDC} from "../../script/DeployUSDC.s.sol";
+import {USDCToken} from "../../../src/USDC.sol";
+import {IUSDC} from  "../../../src/interfaces/IUSDC.sol";
+import {DeployUSDC} from "../../../script/USDC/DeployUSDC.s.sol";
 
 contract TestUSDC is Test {
     USDCToken token;
@@ -26,7 +26,10 @@ contract TestUSDC is Test {
     function testdeployerHasDefaultAdminRole() public {
         // AccessControl DEFAULT_ADMIN_ROLE should be granted to deployer (msg.sender)
         bytes32 adminRole = i_USDC.DEFAULT_ADMIN_ROLE();
-        assertTrue(token.hasRole(adminRole, deployer), "deployer must have DEFAULT_ADMIN_ROLE");
+        assertTrue(
+            token.hasRole(adminRole, deployer),
+            "deployer must have DEFAULT_ADMIN_ROLE"
+        );
     }
 
     function test_admin_can_grant_mint_role() public {
@@ -35,7 +38,10 @@ contract TestUSDC is Test {
         token.grantMintRole(aayush);
 
         bytes32 mintRole = token.MINT_ROLE();
-        assertTrue(token.hasRole(mintRole, aayush), "relayer must have MINT_ROLE after grant");
+        assertTrue(
+            token.hasRole(mintRole, aayush),
+            "relayer must have MINT_ROLE after grant"
+        );
     }
 
     function test_non_admin_cannot_grant_mint_role() public {
@@ -50,8 +56,16 @@ contract TestUSDC is Test {
         vm.prank(relayer);
         token.mint(alice, oneUSDC);
 
-        assertEq(token.balanceOf(alice), oneUSDC, "alice should have 1 USDC (6 decimals)");
-        assertEq(token.totalSupply(), oneUSDC, "totalSupply should reflect mint");
+        assertEq(
+            token.balanceOf(alice),
+            oneUSDC,
+            "alice should have 1 USDC (6 decimals)"
+        );
+        assertEq(
+            token.totalSupply(),
+            oneUSDC,
+            "totalSupply should reflect mint"
+        );
     }
 
     function test_unauthorized_mint_reverts() public {
@@ -80,8 +94,16 @@ contract TestUSDC is Test {
         vm.prank(alice);
         token.burn(burnAmt);
 
-        assertEq(token.balanceOf(alice), minted - burnAmt, "alice balance should be reduced by burn");
-        assertEq(token.totalSupply(), minted - burnAmt, "totalSupply must be reduced by burn");
+        assertEq(
+            token.balanceOf(alice),
+            minted - burnAmt,
+            "alice balance should be reduced by burn"
+        );
+        assertEq(
+            token.totalSupply(),
+            minted - burnAmt,
+            "totalSupply must be reduced by burn"
+        );
     }
 
     function test_burn_zero_reverts() public {
@@ -113,15 +135,31 @@ contract TestUSDC is Test {
         uint256 allowanceAmt = 1_000_000;
         vm.prank(alice);
         token.approve(relayer, allowanceAmt);
-        assertEq(token.allowance(alice, relayer), allowanceAmt, "allowance should be set");
+        assertEq(
+            token.allowance(alice, relayer),
+            allowanceAmt,
+            "allowance should be set"
+        );
 
         // relayer calls burnFrom
         vm.prank(relayer);
         token.burnFrom(alice, allowanceAmt);
 
-        assertEq(token.balanceOf(alice), minted - allowanceAmt, "alice balance decreased by burned amount");
-        assertEq(token.allowance(alice, relayer), 0, "allowance should be consumed");
-        assertEq(token.totalSupply(), minted - allowanceAmt, "totalSupply should reflect burned amount");
+        assertEq(
+            token.balanceOf(alice),
+            minted - allowanceAmt,
+            "alice balance decreased by burned amount"
+        );
+        assertEq(
+            token.allowance(alice, relayer),
+            0,
+            "allowance should be consumed"
+        );
+        assertEq(
+            token.totalSupply(),
+            minted - allowanceAmt,
+            "totalSupply should reflect burned amount"
+        );
     }
 
     function test_burnFrom_insufficient_allowance_reverts() public {

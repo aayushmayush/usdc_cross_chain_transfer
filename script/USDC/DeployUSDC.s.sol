@@ -3,7 +3,7 @@ pragma solidity ^0.8.30;
 
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/Test.sol";
-import {USDCToken} from "../src/USDC.sol";
+import {USDCToken} from "../../src/USDC.sol";
 
 contract DeployUSDC is Script {
     function run() external returns (address, address, USDCToken) {

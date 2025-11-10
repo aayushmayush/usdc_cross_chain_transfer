@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.30;
 
-import {USDCToken} from "../../src/USDC.sol";
+import {USDCToken} from "../../../../src/USDC.sol";
 
 import {Test} from "forge-std/Test.sol";
 

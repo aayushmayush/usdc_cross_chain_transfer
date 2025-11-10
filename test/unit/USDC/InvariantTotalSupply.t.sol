@@ -3,13 +3,13 @@ pragma solidity ^0.8.30;
 
 import {Test} from "forge-std/Test.sol";
 
-import {USDCToken} from "../../src/USDC.sol";
-import {USDCHandler} from "../handlers/USDCHandler.sol";
+import {USDCToken} from "../../../src/USDC.sol";
+import {USDCHandler} from "./handlers/USDCHandler.sol";
 
 contract InvariantTotalSupply is Test {
     USDCToken public token;
     USDCHandler public handler;
-     address[] public actors;
+    address[] public actors;
 
     address relayer = makeAddr("relayer");
     address alice = makeAddr("alice");
@@ -22,9 +22,7 @@ contract InvariantTotalSupply is Test {
         token.grantMintRole(relayer);
         vm.stopPrank();
 
-       
-        actors = [relayer,alice,bob];
-       
+        actors = [relayer, alice, bob];
 
         handler = new USDCHandler(token, actors);
 
