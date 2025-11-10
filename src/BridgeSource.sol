@@ -22,6 +22,7 @@ contract BridgeSource is Ownable {
         uint256 nonce,
         uint256 timestamp
     );
+    event SupportedChainUpdated(uint256 chainId, bool enabled);
 
     constructor(USDCToken _usdc) Ownable(msg.sender){
         usdc_token = _usdc;
@@ -59,6 +60,7 @@ contract BridgeSource is Ownable {
 
     function setSupportedChain(uint256 _chainId, bool _value) public onlyOwner{
         supportedDstChains[_chainId] = _value;
+        emit SupportedChainUpdated(_chainId,_value);
     }
 
     function nextNonce() external view returns (uint256) {
