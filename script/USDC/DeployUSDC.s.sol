@@ -28,7 +28,7 @@ contract DeployUSDC is Script {
         // If a relayer address was provided (non-zero), grant it mint role via wrapper
         if (minter != address(0)) {
             // uses the grantMintRole wrapper on your token contract
-            token.grantMintRole(relayer);
+            token.grantMintRole(minter);
         } else {
             console.log("No RELAYER_ADDRESS provided; skipping grantMintRole.");
         }
